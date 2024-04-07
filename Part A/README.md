@@ -20,6 +20,7 @@ Ensure the following requirements are met before starting:
    ```shell
    cd Part A
    ```
+3. **Wandb Key:** Add wandb api key in collab secret with field name wandb_key.
 
 ## Dataset Preparation
 
