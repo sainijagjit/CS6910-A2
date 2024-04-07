@@ -1,4 +1,5 @@
 # Pretrained Model on iNaturalist Dataset
+
 ## Submitted By: Jagjit Singh NS24Z060
 
 ### Link to the project report:
@@ -9,11 +10,11 @@ This detailed guide provides instructions for setting up, training, and evaluati
 
 ## Prerequisites
 
-Ensure the following requirements are met before starting:
+Before you begin, ensure you have Python 3.6 or later installed, along with PyTorch, PyTorch Lightning, and other required libraries:
 
-- Python 3.6 or later.
-- GPU access (recommended for faster training).
-- Internet connection for dataset download and Python package installation.
+```bash
+pip install torch torchvision torchmetrics pytorch-lightning
+```
 
 ## Installation Steps
 
@@ -27,6 +28,55 @@ Ensure the following requirements are met before starting:
    ```
 3. **Wandb Key:** Add wandb api key in collab secret with field name wandb_key.
 
+## Dataset Structure
+
+Your dataset should be organized in the following structure, with a separate folder for training and validation images. Each of these folders should contain subdirectories for each class of images:
+
+```
+path/to/your/dataset/
+├── train/
+│   ├── class1/
+│   ├── class2/
+│   │   ...
+└── val/
+    ├── class1/
+    ├── class2/
+    │   ...
+```
+
+## Training the Model
+
+To train the model, use the following command, specifying the path to your dataset and other training parameters as needed:
+
+```bash
+python train_evaluate.py --mode train --data_dir path/to/your/dataset --batch_size 64 --learning_rate 0.001 --epochs 10 --augment_data --batch_norm
+```
+
+### Training Arguments:
+
+- `--mode` specifies the operation mode. Set to `train` for training.
+- `--data_dir` sets the path to the dataset directory.
+- `--batch_size` determines the batch size for training.
+- `--learning_rate` sets the learning rate for the optimizer.
+- `--epochs` specifies the number of epochs to train for.
+- `--augment_data` enables data augmentation (flag).
+
+## Evaluating the Model
+
+For model evaluation, use the following command, providing the path to your saved model weights:
+
+```bash
+python train_evaluate.py --mode evaluate --data_dir path/to/your/dataset --weights_path path/to/your/model_weights.ckpt
+```
+
+### Evaluation Arguments:
+
+- `--mode` should be set to `evaluate` for evaluation.
+- `--data_dir` specifies the path to the dataset directory for evaluation.
+- `--weights_path` sets the path to the saved model weights.
+
+This flexible approach allows you to easily train and evaluate the CNN model with custom configurations.
+
 ## Dataset Preparation
 
 Download and prepare the iNaturalist dataset by following these steps:
@@ -35,7 +85,7 @@ Download and prepare the iNaturalist dataset by following these steps:
 2. **Copy dataset** to a directory in google drive, ensuring there are `train` and `val` folders for training and validation images, respectively.
 3. **Replace zip path** with the link to your dataset
 
-## Training the Model
+## Training the Model (With WanDB)
 
 To train the model, follow these steps:
 

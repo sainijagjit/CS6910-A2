@@ -1,4 +1,5 @@
 # CNN on iNaturalist Dataset
+
 ## Submitted By: Jagjit Singh NS24Z060
 
 ### Link to the project report:
@@ -9,11 +10,11 @@ This detailed guide provides instructions for setting up, training, and evaluati
 
 ## Prerequisites
 
-Ensure the following requirements are met before starting:
+Before you begin, ensure you have Python 3.6 or later installed, along with PyTorch, PyTorch Lightning, and other required libraries:
 
-- Python 3.6 or later.
-- GPU access (recommended for faster training).
-- Internet connection for dataset download and Python package installation.
+```bash
+pip install torch torchvision torchmetrics pytorch-lightning
+```
 
 ## Installation Steps
 
@@ -27,6 +28,64 @@ Ensure the following requirements are met before starting:
    ```
 3. **Wandb Key:** Add wandb api key in collab secret with field name wandb_key.
 
+## Dataset Structure
+
+Your dataset should be organized in the following structure, with a separate folder for training and validation images. Each of these folders should contain subdirectories for each class of images:
+
+```
+path/to/your/dataset/
+├── train/
+│   ├── class1/
+│   ├── class2/
+│   │   ...
+└── val/
+    ├── class1/
+    ├── class2/
+    │   ...
+```
+
+## Training the Model
+
+To train the model, use the following command, specifying the path to your dataset and other training parameters as needed:
+
+```bash
+python train_evaluate.py --mode train --data_dir path/to/your/dataset --batch_size 64 --learning_rate 0.001 --epochs 10 --activation_function ReLU --num_filters 32 64 128 256 --dense_neurons 512 --dropout 0.5 --augment_data --batch_norm
+```
+
+### Training Arguments:
+
+- `--mode` specifies the operation mode. Set to `train` for training.
+- `--data_dir` sets the path to the dataset directory.
+- `--batch_size` determines the batch size for training.
+- `--learning_rate` sets the learning rate for the optimizer.
+- `--epochs` specifies the number of epochs to train for.
+- `--activation_function` chooses the activation function used in the network.
+- `--num_filters` sets a list of the number of filters in each convolutional layer (space-separated).
+- `--dense_neurons` determines the number of neurons in the dense layer.
+- `--dropout` sets the dropout rate for the network.
+- `--augment_data` enables data augmentation (flag).
+- `--batch_norm` enables batch normalization (flag).
+
+## Evaluating the Model
+
+For model evaluation, use the following command, providing the path to your saved model weights:
+
+```bash
+python train_evaluate.py --mode evaluate --data_dir path/to/your/dataset --weights_path path/to/your/model_weights.ckpt
+```
+
+### Evaluation Arguments:
+
+- `--mode` should be set to `evaluate` for evaluation.
+- `--data_dir` specifies the path to the dataset directory for evaluation.
+- `--weights_path` sets the path to the saved model weights.
+
+This flexible approach allows you to easily train and evaluate the CNN model with custom configurations.
+
+## Training the Model (With WanDB)
+
+To train the model, follow these steps:
+
 ## Dataset Preparation
 
 Download and prepare the iNaturalist dataset by following these steps:
@@ -34,15 +93,10 @@ Download and prepare the iNaturalist dataset by following these steps:
 1. **Download the dataset** from [the iNaturalist competition link](https://github.com/visipedia/inat_comp) or the dataset's official page.
 2. **Copy dataset** to a directory in google drive, ensuring there are `train` and `val` folders for training and validation images, respectively.
 3. **Replace zip path** with the link to your dataset
-
-## Training the Model
-
-To train the model, follow these steps:
-
-1. **Configure the model and training parameters:** Open `Assignment_2_iNaturalist.ipynb` in a Jupyter Notebook or Google Colab. The configuration section allows you to set various hyperparameters such as `num_filters`, `batch_size`, `learning_rate`, etc.
-2. **Integrate with Weights & Biases (Optional):** For tracking experiments, sign up for a Weights & Biases account and log in. Update the `wandb` configuration within the notebook to set your project and entity name. This step is optional but recommended for better experiment tracking.
-3. **Adjust the `sweep_config`:** If you're planning to use Weights & Biases for hyperparameter tuning, adjust the `sweep_config` dictionary in the notebook to define the hyperparameter search space.
-4. **Start the training process:** Run all cells in the notebook to start the training process. The training script will automatically split the data, train the model, and validate it on the validation dataset. The best model will be saved based on validation accuracy.
+4. **Configure the model and training parameters:** Open `Assignment_2_iNaturalist.ipynb` in a Jupyter Notebook or Google Colab. The configuration section allows you to set various hyperparameters such as `num_filters`, `batch_size`, `learning_rate`, etc.
+5. **Integrate with Weights & Biases (Optional):** For tracking experiments, sign up for a Weights & Biases account and log in. Update the `wandb` configuration within the notebook to set your project and entity name. This step is optional but recommended for better experiment tracking.
+6. **Adjust the `sweep_config`:** If you're planning to use Weights & Biases for hyperparameter tuning, adjust the `sweep_config` dictionary in the notebook to define the hyperparameter search space.
+7. **Start the training process:** Run all cells in the notebook to start the training process. The training script will automatically split the data, train the model, and validate it on the validation dataset. The best model will be saved based on validation accuracy.
 
 ## Evaluation
 
